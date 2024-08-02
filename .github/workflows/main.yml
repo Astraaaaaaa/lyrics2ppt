@@ -64,20 +64,25 @@ jobs:
         } else {
           # Use the tag_name from the event input
           echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> "$GITHUB_OUTPUT"
+          run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
           echo "TAG_NAME=" >> "$GITHUB_ENV" # Set the environment variable
         }
 
     - name: Debug Tag Name
-      run: echo "${{ steps.determine_tag_name.outputs.TAG_NAME }}"
+      env:
+        TAG_NAME: ${{ steps.determine_tag_name.outputs.TAG_NAME }}
+        SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
+      run: echo "$TAG_NAME $SELECTED_COLOR"
 
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
+        TAG_NAME: ${{ steps.determine_tag_name.outputs.TAG_NAME }}
       with:
-        tag_name: ${{ steps.determine_tag_name.outputs.TAG_NAME }}
-        release_name: Release ${{ steps.determine_tag_name.outputs.TAG_NAME }} 
+        tag_name: $TAG_NAME
+        release_name: Release $TAG_NAME
         draft: false
         prerelease: false
 
