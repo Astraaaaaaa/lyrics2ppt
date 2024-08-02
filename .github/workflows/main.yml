@@ -100,5 +100,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./dist/${{ github.event.inputs.executable_name }}
-        asset_name: ${{ github.event.inputs.executable_name }}
+        asset_name: 'lyrics2ppt.exe'
         asset_content_type: application/octet-stream
