@@ -75,7 +75,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: ${{ github.event.inputs.tag_name }}  # Use the user-defined tag name
-        release_name: Release ${{ github.event.inputs.tag_name }}
+        tag_name: 'v1.0.0'
+        release_name: Release v1.0.0
         draft: false
         prerelease: false
