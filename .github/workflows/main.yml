@@ -7,20 +7,20 @@ on:
       - 'v*'  # Trigger only when a tag starting with 'v' is pushed
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Name of the tag'
-        required: false
-        default: 'v1.0.0'
-      executable_name:
-        description: 'Name of the executable'
-        required: true
-        default: 'lyrics2ppt.exe'
-      upload_artifact:
-        description: 'Upload artifact to release'
-        required: false
-        default: 'true'
+  # workflow_dispatch:
+  #   inputs:
+  #     tag_name:
+  #       description: 'Name of the tag'
+  #       required: false
+  #       default: 'v1.0.0'
+  #     executable_name:
+  #       description: 'Name of the executable'
+  #       required: true
+  #       default: 'lyrics2ppt.exe'
+  #     upload_artifact:
+  #       description: 'Upload artifact to release'
+  #       required: false
+  #       default: 'true'
 
 jobs:
   build:
