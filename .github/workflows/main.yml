@@ -1,8 +1,13 @@
+name: Build and Release
+
 on:
   push:
     branches: [ main ]
     tags:
       - 'v*'  # Trigger only when a tag starting with 'v' is pushed
+
+  pull_request:
+    branches: [ main ]
 
   workflow_dispatch:
     inputs:
@@ -18,9 +23,10 @@ on:
         description: 'Upload artifact to release'
         required: false
         default: 'true'
+
 jobs:
   build:
-    runs-on: ['windows-latest']
+    runs-on: windows-latest
     strategy:
       fail-fast: false
 
