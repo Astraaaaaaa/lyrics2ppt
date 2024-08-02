@@ -60,10 +60,10 @@ jobs:
     - name: Determine Tag or SHA
       id: determine_tag_or_sha
       run: |
-        if ($env:GITHUB_REF -eq "refs/heads/main") {
+        # if ($env:GITHUB_REF -eq "refs/heads/main") {
           echo "::set-output name=ref::refs/heads/main"
           echo "::set-output name=ref_name::main"
-        } else {
+        # } else {
           echo "::set-output name=ref::${{ github.sha }}"
           echo "::set-output name=ref_name::${{ github.sha }}"
-        }
+        # }
