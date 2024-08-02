@@ -36,6 +36,7 @@ jobs:
     - run: ./dist/lyrics2ppt.exe
     - uses: actions/upload-artifact@v2
       with:
+        name: build-artifact
         path: dist/*
 
   release:
