@@ -34,9 +34,9 @@ jobs:
         python-version: 3.7
 
     - run: pip install -r requirements.txt
-    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=${{ github.event.inputs.executable_name }}
+    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=lyrics2ppt
     # Optionally verify that it works (provided that it does not need user interaction)
-    - run: ./dist/${{ github.event.inputs.executable_name }}
+    - run: ./dist/lyrics2ppt.exe
     - uses: actions/upload-artifact@v2
       with:
         name: build-artifact
