@@ -16,7 +16,7 @@ on:
       executable_name:
         description: 'Name of the executable'
         required: true
-        default: 'lyrics2ppt.exe'
+        default: 'lyrics2ppt'
       upload_artifact:
         description: 'Upload artifact to release'
         required: false
@@ -35,9 +35,9 @@ jobs:
         python-version: 3.7
 
     - run: pip install -r requirements.txt
-    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=lyrics2ppt
+    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=--name=${{ github.event.inputs.executable_name }}
     # Optionally verify that it works (provided that it does not need user interaction)
-    - run: ./dist/lyrics2ppt.exe
+    - run: ./dist/--name=${{ github.event.inputs.executable_name }}.exe
     - uses: actions/upload-artifact@v2
       with:
         name: build-artifact
@@ -47,7 +47,7 @@ jobs:
   release:
     runs-on: windows-latest
     needs: build
-    # if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
 
     steps:
     - uses: actions/checkout@v2
@@ -58,16 +58,18 @@ jobs:
         name: build-artifact
         path: ./dist
 
-    - name: Determine Tag or SHA
-      id: determine_tag_or_sha
+    - name: Determine Tag Name
+      id: determine_tag_name
       run: |
-        # if ($env:GITHUB_REF -eq "refs/heads/main") {
-          echo "::set-output name=ref::refs/heads/main"
-          echo "::set-output name=ref_name::main"
-        # } else {
-          echo "::set-output name=ref::${{ github.sha }}"
-          echo "::set-output name=ref_name::${{ github.sha }}"
-        # }
+        if ($env:GITHUB_REF -like "refs/tags/*") {
+          # Extract the tag name from GITHUB_REF
+          $tag_name = $env:GITHUB_REF.Substring(10)  # Remove 'refs/tags/' (10 characters)
+          echo "::set-output name=tag_name::$tag_name"
+        } else {
+          # Use the tag_name from the event input
+          $tag_name = "${{ github.event.inputs.tag_name }}"
+          echo "::set-output name=tag_name::$tag_name"
+        }
 
     - name: Create Release
       id: create_release
@@ -75,18 +77,18 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: 'v1.0.0'
-        release_name: Release v1.0.0
+        tag_name: ${{ steps.determine_tag_name.outputs.tag_name }}
+        release_name: Release ${{ steps.determine_tag_name.outputs.tag_name }}
         draft: false
         prerelease: false
 
     - name: Upload Release Asset
-      # if: ${{ github.event.inputs.upload_artifact == 'true' }}
+      if: ${{ github.event.inputs.upload_artifact == 'true' }}
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/lyrics2ppt.exe
-        asset_name: lyrics2ppt.exe
+        asset_path: ./dist/--name=${{ github.event.inputs.executable_name }}.exe
+        asset_name: --name=${{ github.event.inputs.executable_name }}.exe
         asset_content_type: application/octet-stream
