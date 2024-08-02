@@ -68,7 +68,7 @@ jobs:
         }
 
     - name: Debug Tag Name
-      run: echo "$BUILD_ENV"
+      run: echo "${{ steps.determine_tag_name.outputs.TAG_NAME }}"
 
     - name: Create Release
       id: create_release
