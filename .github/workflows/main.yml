@@ -1,0 +1,24 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest']
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - run: pip install -r requirements.txt
+    - run: pyinstaller generate_ppt_from_txt.py --onefile --optimize=2 --exclude-module tkinter --exclude-module test  --icon=lyrics2ppt.ico --name=lyrics2ppt
+    # Optionally verify that it works (provided that it does not need user interaction)
+    - run: ./dist/lyrics2ppt.exe
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
