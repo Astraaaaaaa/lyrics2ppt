@@ -256,7 +256,7 @@ if __name__ == "__main__":
   / /_ ______(_)______ |_  |___  ___  / /_
  / / // / __/ / __(_-</ __// _ \/ _ \/ __/
 /_/\_, /_/ /_/\__/___/____/ .__/ .__/\__/ 
-    /___/                  /_/  /_/         
+  /___/                  /_/  /_/         
 """
     print(f"{YELLOW}{BOLD}{ascii_art}{RESET}")
     print(f"{YELLOW}{REVERSE}Welcome to the PowerPoint Generator!{RESET}\n")
