@@ -3,6 +3,20 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Name of the tag'
+        required: true
+        default: 'v1.0.0'
+      executable_name:
+        description: 'Name of the executable'
+        required: true
+        default: 'lyrics2ppt.exe'
+      upload_artifact:
+        description: 'Upload artifact to release'
+        required: false
+        default: 'true'
 
 jobs:
   build:
@@ -64,6 +78,3 @@ jobs:
         asset_path: ./dist/${{ github.event.inputs.executable_name }}
         asset_name: ${{ github.event.inputs.executable_name }}
         asset_content_type: application/octet-stream
-
-    - name: Verify Upload
-      run: echo "Uploaded asset: ${{ github.event.inputs.executable_name }}"
