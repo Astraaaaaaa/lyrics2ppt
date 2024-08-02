@@ -5,16 +5,13 @@ on:
     branches: [ main ]
     tags:
       - 'v*'  # Trigger only when a tag starting with 'v' is pushed
-
   pull_request:
     branches: [ main ]
-
   workflow_dispatch:
     inputs:
       tag_name:
         description: 'Name of the tag'
-        required: true
-        default: 'v1.0.0'
+        required: false
       executable_name:
         description: 'Name of the executable'
         required: true
@@ -37,68 +34,10 @@ jobs:
         python-version: 3.7
 
     - run: pip install -r requirements.txt
-    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=lyrics2ppt
+    - run: pyinstaller generate_ppt_from_txt.py --onefile --icon=lyrics2ppt.ico --name=${{ github.event.inputs.executable_name }}
     # Optionally verify that it works (provided that it does not need user interaction)
-    - run: ./dist/lyrics2ppt.exe
+    - run: ./dist/${{ github.event.inputs.executable_name }}
     - uses: actions/upload-artifact@v2
       with:
         name: build-artifact
         path: dist/*
-
-  release:
-    runs-on: windows-latest
-    needs: build
-    # if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
-    env:
-      EXECUTABLE_NAME: lyrics2ppt.exe
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Download Build Artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: build-artifact
-        path: ./dist
-
-    - name: Determine Tag Name
-      id: determine_tag
-      run: |
-        if ($env:GITHUB_REF -ne "") {
-          echo "::set-output name=tag::${{ github.ref_name }}"
-        } else {
-          echo "::set-output name=tag::${{ github.event.inputs.tag_name }}"
-        }
-
-    - name: Delete Existing Release
-      if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
-      run: |
-        existing_release_id=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
-          https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ steps.determine_tag.outputs.tag }} \
-          | jq -r '.id')
-        if [ "$existing_release_id" != "null" ]; then
-          curl -s -X DELETE -H "Authorization: token ${{ secrets.PAT }}" \
-            https://api.github.com/repos/${{ github.repository }}/releases/$existing_release_id
-        fi
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      with:
-        tag_name: ${{ steps.determine_tag.outputs.tag }}
-        release_name: Release ${{ steps.determine_tag.outputs.tag }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      # if: ${{ github.event.inputs.upload_artifact == 'true' }}
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist
-        asset_name: 'lyrics2ppt.exe'
-        asset_content_type: application/octet-stream
