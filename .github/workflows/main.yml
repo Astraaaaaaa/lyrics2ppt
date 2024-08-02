@@ -34,14 +34,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Determine Tag Name
-      id: determine_tag
-      run: |
-        if [ "${{ github.ref }}" != "" ]; then
-          echo "::set-output name=tag::${{ github.ref_name }}"
-        else
-          echo "::set-output name=tag::${{ github.event.inputs.tag_name }}"
-        fi
+    # - name: Determine Tag Name
+    #   id: determine_tag
+    #   run: |
+    #     if [ "${{ github.ref }}" != "" ]; then
+    #       echo "::set-output name=tag::${{ github.ref_name }}"
+    #     else
+    #       echo "::set-output name=tag::${{ github.event.inputs.tag_name }}"
+    #     fi
 
     - name: Create Release
       id: create_release
