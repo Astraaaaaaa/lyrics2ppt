@@ -6,8 +6,8 @@
    __         _         ___            __ 
   / /_ ______(_)______ |_  |___  ___  / /_
  / / // / __/ / __(_-</ __// _ \/ _ \/ __/
-/_/\_, /_/ /_/\__/___/____/ .__/ .__/\__/
-  /___/                  /_/  /_/         
+/_/\_, /_/ /_/\__/___/____/ .__/ .__/\__/ 
+    /___/                  /_/  /_/         
 ```
 
 # PowerPoint Generator from Text File
@@ -24,11 +24,10 @@ This project provides a script to generate a PowerPoint presentation from a text
 
 ## Requirements
 
-- ![Python](https://img.shields.io/badge/Python-3.x-blue.svg)
-- ![python-pptx](https://img.shields.io/badge/python--pptx-0.6.21-green.svg)
-- ![Pillow](https://img.shields.io/badge/Pillow-8.2.0-yellow.svg)
-- ![lxml](https://img.shields.io/badge/lxml-4.6.3-red.svg)
-
+![Python](https://img.shields.io/badge/Python-3.x-blue.svg)
+![python-pptx](https://img.shields.io/badge/python--pptx-0.6.21-green.svg)
+![Pillow](https://img.shields.io/badge/Pillow-8.2.0-yellow.svg)
+![lxml](https://img.shields.io/badge/lxml-4.6.3-red.svg)
 
 ## Installation
 
@@ -70,12 +69,30 @@ python generate_ppt_from_txt.py \
 - `--font-size`: Font size (default: `48`).
 - `--transparency`: Transparency level for the background image (default: `0.5`).
 
+### Sample Input File
+
+Create a text file named `input.txt` with the following format:
+
+```
+Song Title
+
+Song Lyrics 1 (1st slide)
+Song Lyrics 2 (1st slide, new line)
+
+Song Lyrics 3 (2nd slide)
+Song Lyrics 4 (2nd slide)
+Song Lyrics 5 (2nd slide)
+
+Song Lyrics 6 (3rd slide)
+Song Lyrics 7 (3rd slide)
+
+... (and so on)
+```
+
+- The first line is the title of the presentation.
+- Each paragraph separated by a blank line will be a new slide.
+- Lines within a paragraph will be added as bullet points on the same slide.
+
 ## Maintainer
 
-- Astra <astralee95@gmail.com>
-
-## Acknowledgements
-
-- [python-pptx](https://github.com/scanny/python-pptx)
-- [Pillow](https://python-pillow.org/)
-- [lxml](https://lxml.de/)
+Astra Lee <astralee95@gmail.com>
