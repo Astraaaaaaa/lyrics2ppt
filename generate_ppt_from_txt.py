@@ -12,6 +12,14 @@ Licensed under the MIT License. See the LICENSE file for more details.
 
 import os
 import ctypes
+import sys
+
+# Set the console encoding to UTF-8
+if os.name == 'nt':
+    import msvcrt
+    msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 
 import argparse
 from pptx import Presentation
