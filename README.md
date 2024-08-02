@@ -72,7 +72,6 @@ python generate_ppt_from_txt.py \
 ### Sample Input File
 
 Create a text file named `input.txt` with the following format:
-
 ```
 Song Title
 
@@ -88,7 +87,6 @@ Song Lyrics 7 (3rd slide)
 
 ... (and so on)
 ```
-
 - The first line is the title of the presentation.
 - Each paragraph separated by a blank line will be a new slide.
 - Lines within a paragraph will be added as bullet points on the same slide.
