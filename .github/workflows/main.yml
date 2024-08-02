@@ -25,14 +25,18 @@ jobs:
         path: dist/*
 
   release:
-    if: startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
     needs: build
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     env:
       EXECUTABLE_NAME: lyrics2ppt.exe
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Determine Tag Name
+      id: determine_tag
+      run: echo "::set-output name=tag::${{ github.ref_name || github.event.inputs.tag_name }}"
 
     - name: Create Release
       id: create_release
@@ -40,8 +44,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.determine_tag.outputs.tag }}
+        release_name: Release ${{ steps.determine_tag.outputs.tag }}
         draft: false
         prerelease: false
 
