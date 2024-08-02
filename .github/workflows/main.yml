@@ -74,7 +74,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: ${{ steps.determine_ref.outputs.ref_name }}
-        release_name: Release ${{ steps.determine_ref.outputs.ref_name }}
+        tag_name: ${{ steps.determine_tag_or_sha.outputs.ref_name }}
+        release_name: Release ${{ steps.determine_tag_or_sha.outputs.ref_name }}
         draft: false
         prerelease: false
