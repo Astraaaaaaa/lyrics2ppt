@@ -67,8 +67,22 @@ jobs:
           echo "::set-output name=tag_name::$tag_name"
         }
 
+    - name: Check for Existing Tag
+      id: check_tag
+      run: |
+        TAG_NAME="${{ steps.determine_tag_name.outputs.tag_name }}"
+        existing_tag=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+          https://api.github.com/repos/${{ github.repository }}/git/refs/tags/$TAG_NAME | jq -r '.object.sha')
+        if [ "$existing_tag" != "null" ]; then
+          echo "Tag $TAG_NAME already exists. Skipping release creation."
+          echo "tag_exists=true" >> $GITHUB_ENV
+        else
+          echo "tag_exists=false" >> $GITHUB_ENV
+        fi
+
     - name: Create Release
       id: create_release
+      if: env.tag_exists == 'false'  # Only create release if tag does not exist
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -79,7 +93,7 @@ jobs:
         prerelease: false
 
     - name: Upload Release Asset
-      if: ${{ github.event.inputs.upload_artifact == 'true' }}
+      if: ${{ github.event.inputs.upload_artifact == 'true' && env.tag_exists == 'false' }}  # Only upload if tag does not exist
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
