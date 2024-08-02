@@ -63,8 +63,8 @@ jobs:
           echo "TAG_NAME=$tag_name" >> "$GITHUB_ENV" # Set the environment variable
         } else {
           # Use the tag_name from the event input
-          echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> "$GITHUB_OUTPUT"
-          echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
+          echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+          echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
           echo "TAG_NAME=" >> "$GITHUB_ENV" # Set the environment variable
         }
 
@@ -82,8 +82,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT }}
         TAG_NAME: ${{ steps.determine_tag_name.outputs.TAG_NAME }}
       with:
-        tag_name: $TAG_NAME
-        release_name: Release $TAG_NAME
+        tag_name: ${{ steps.determine_tag_name.outputs.TAG_NAME }}" 
+        release_name: Release ${{ steps.determine_tag_name.outputs.TAG_NAME }}" 
         draft: false
         prerelease: false
 
