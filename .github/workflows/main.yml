@@ -76,8 +76,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: ${TAG_NAME}  # Use the environment variable
-        release_name: Release ${TAG_NAME}  # Use the environment variable
+        tag_name: $env:TAG_NAME  # Use the environment variable
+        release_name: Release $env:TAG_NAME  # Use the environment variable
         draft: false
         prerelease: false
 
