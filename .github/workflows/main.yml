@@ -68,7 +68,7 @@ jobs:
         }
 
     - name: Debug Tag Name
-      run: echo "$TAG_NAME"
+      run: echo $GITHUB_ENV 
 
     - name: Create Release
       id: create_release
