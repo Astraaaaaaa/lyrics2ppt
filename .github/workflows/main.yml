@@ -45,7 +45,7 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v2
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
@@ -54,9 +54,12 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Verify Release Creation
+      run: echo "Release created with tag: ${{ steps.determine_tag.outputs.tag }}"
+
     - name: Upload Release Asset
       if: ${{ github.event.inputs.upload_artifact == 'true' }}
-      uses: actions/upload-release-asset@v2
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
@@ -64,3 +67,6 @@ jobs:
         asset_path: ./dist/${{ github.event.inputs.executable_name }}
         asset_name: ${{ github.event.inputs.executable_name }}
         asset_content_type: application/octet-stream
+
+    - name: Verify Upload
+      run: echo "Uploaded asset: ${{ github.event.inputs.executable_name }}"
