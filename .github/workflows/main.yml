@@ -64,11 +64,11 @@ jobs:
         if ($env:GITHUB_REF -like "refs/tags/*") {
           # Extract the tag name from GITHUB_REF
           $tag_name = $env:GITHUB_REF.Substring(10)  # Remove 'refs/tags/' (10 characters)
-          echo "::set-output name=tag_name::$tag_name"
+          echo "tag_name=$tag_name" >> $GITHUB_ENV  # Set the environment variable
         } else {
           # Use the tag_name from the event input
           $tag_name = "${{ github.event.inputs.tag_name }}"
-          echo "::set-output name=tag_name::$tag_name"
+          echo "tag_name=$tag_name" >> $GITHUB_ENV  # Set the environment variable
         }
 
     - name: Create Release
