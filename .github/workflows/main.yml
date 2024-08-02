@@ -12,7 +12,7 @@ on:
       tag_name:
         description: 'Name of the tag'
         required: false
-        default: 'v0.0'
+        default: 'v1.0.0'
       executable_name:
         description: 'Name of the executable'
         required: true
