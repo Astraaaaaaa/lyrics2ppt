@@ -3,8 +3,8 @@ name: Build and Release
 on:
   push:
     branches: [ main ]
-    tags:
-      - 'v*'  # Trigger only when a tag starting with 'v' is pushed
+    # tags:
+    #   - 'v*'  # Trigger only when a tag starting with 'v' is pushed
   pull_request:
     branches: [ main ]
   workflow_dispatch:
