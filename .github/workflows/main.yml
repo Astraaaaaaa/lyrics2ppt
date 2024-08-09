@@ -71,13 +71,14 @@ jobs:
       id: check_tag
       run: |
         $existing_tag = $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" `
-          https://api.github.com/repos/${{ github.repository }}/git/refs/tags/${{ env.tag_name }} | jq -r '.object.sha')
+          https://api.github.com/repos/${{ github.repository }}/git/refs/tags/${{ env.tag_name }} | `
+          jq -r '.[] | select(.ref == "refs/tags/${{ env.tag_name }}") | .object.sha')
         if ($existing_tag -ne $null) {
           echo "tag_exists=true" | Out-File -FilePath $env:GITHUB_ENV -Append
         } else {
           echo "tag_exists=false" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
-
+        
     - name: Create Release
       id: create_release
       if: env.tag_exists == 'false'  # Only create release if tag does not exist
